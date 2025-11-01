@@ -57,8 +57,21 @@ Functional Simulation:
 
 ### Verilog code for 4-Bit Up-Down Counter:
 
-*/Program  for  4-Bit Up-Down Counter
-
+```
+module counter(clk,m,rst,count);
+input clk,m,rst;
+output reg [3:0] count;
+always@(posedge clk or negedge rst)
+begin
+if (!rst)
+count=0;
+else if (m)
+count=count+1;
+else
+count=count-1;
+end
+endmodule
+```
 	Use Save option or Ctrl+S to save the code or click on the save option from the top most right corner and close the text file.
 
 ## Creating Test bench:
@@ -67,8 +80,30 @@ Functional Simulation:
 
 ### Test-bench code for 4-Bit Up-Down Counter:
 
-*/Test bench Program  for  4-Bit Up-Down Counter
+```
+module counter_tb;
+reg clk,rst,m;
+wire[3:0] count;
+initial
+begin
+clk=0;
+rst=0;#5;
+rst=1;
+end
+initial
+begin
+m=1;
+#160 m=0;
+end
 
+counter counter1 (clk,m,rst, count);
+always #5 clk=~clk;
+initial $monitor("Time=%t rst=%b clk=%b count=%b", $time,rst,clk,count);
+
+initial
+#320 $finish;
+endmodule
+```
 ### To Launch Simulation tool
 	linux:/> nclaunch -new&            // “-new” option is used for invoking NCVERILOG for the first time for any design
 
